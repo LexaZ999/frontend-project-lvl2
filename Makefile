@@ -4,5 +4,5 @@ install:
 lint:
 	npx eslint .
 
-tests:
+test:
 	npm run test
