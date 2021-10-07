@@ -15,40 +15,40 @@ const stylish = (astDiff) => {
 
       const getStr = (marker, value) => {
         if (value === 'children') {
-          return `${space.repeat(indent)} ${marker} ${getValue(elem, 'name')}: {${formater(getValue(elem, 'children'))}\n${space.repeat(indent + 4)}}`;
+          return `${space.repeat(indent)} ${marker} ${getValue(elem, 'key')}: {${formater(getValue(elem, 'children'))}\n${space.repeat(indent + 4)}}`;
         }
-        return `${space.repeat(indent)} ${marker} ${getValue(elem, 'name')}: ${value}`;
+        return `${space.repeat(indent)} ${marker} ${getValue(elem, 'key')}: ${value}`;
       };
 
-      if (getValue(elem, 'value1') === 'nested' && getValue(elem, 'value2') === 'nested') {
+      if (getValue(elem, 'status') === 'nested') {
         return getStr(space, children);
       }
 
-      if (getValue(elem, 'value1') === 'nested' && getValue(elem, 'value2') === undefined) {
-        const tab = (getValue(elem, 'status') === 'del') ? space : minus;
+      if (getValue(elem, 'status') === 'deleted nested') {
+        const tab = (getValue(elem, 'substatus') === 'del') ? space : minus;
         return getStr(tab, children);
       }
 
-      if (getValue(elem, 'value1') === 'nested' && getValue(elem, 'value2') !== undefined && getValue(elem, 'value2') !== 'nested') {
+      if (getValue(elem, 'status') === 'nested changed to value') {
         return `${getStr(minus, children)}\n ${getStr(plus, value2)}`;
       }
 
-      if (getValue(elem, 'value1') === undefined && getValue(elem, 'value2') === 'nested') {
-        const tab = (getValue(elem, 'status') === 'add') ? space : plus;
+      if (getValue(elem, 'status') === 'added nested') {
+        const tab = (getValue(elem, 'substatus') === 'add') ? space : plus;
         return getStr(tab, children);
       }
 
-      if (getValue(elem, 'value1') !== undefined && getValue(elem, 'value2') === undefined) {
-        const tab = (getValue(elem, 'status') === 'del') ? space : minus;
+      if (getValue(elem, 'status') === 'del') {
+        const tab = (getValue(elem, 'substatus') === 'del') ? space : minus;
         return getStr(tab, value1);
       }
 
-      if (getValue(elem, 'value1') === undefined && getValue(elem, 'value2') !== undefined) {
-        const tab = (getValue(elem, 'status') === 'add') ? space : plus;
+      if (getValue(elem, 'status') === 'add') {
+        const tab = (getValue(elem, 'substatus') === 'add') ? space : plus;
         return getStr(tab, value2);
       }
 
-      if (getValue(elem, 'value1') !== getValue(elem, 'value2')) {
+      if (getValue(elem, 'status') === 'changed') {
         return `${getStr(minus, value1)}\n ${getStr(plus, value2)}`;
       }
 
