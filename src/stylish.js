@@ -1,11 +1,11 @@
 import getValue from './getValue.js';
 
+const space = ' ';
+const minus = '-';
+const plus = '+';
+
 const stylish = (astDiff) => {
   const formater = (data) => {
-    const space = ' ';
-    const minus = '-';
-    const plus = '+';
-
     const result = data.flatMap((elem) => {
       const numberOfSpaces = 4;
       const indent = getValue(elem, 'depth') * numberOfSpaces;
@@ -20,44 +20,42 @@ const stylish = (astDiff) => {
         return `${space.repeat(indent)} ${marker} ${getValue(elem, 'key')}: ${value}`;
       };
 
-      if (getValue(elem, 'status') === 'nested') {
-        return getStr(space, children);
-      }
+      const isValidStatus = (status) => getValue(elem, 'status') === status;
 
-      if (getValue(elem, 'status') === 'deleted nested') {
-        const tab = (getValue(elem, 'substatus') === 'del') ? space : minus;
-        return getStr(tab, children);
-      }
+      const handleByStatus1 = (value, status, marker, substatus) => {
+        if (isValidStatus(status)) {
+          const tab = (getValue(elem, 'substatus') === substatus) ? space : marker;
+          return getStr(tab, value);
+        }
+        return [];
+      };
+      const handleByStatus2 = (value, status) => {
+        if (isValidStatus(status)) {
+          return getStr(space, value);
+        }
+        return [];
+      };
+      const handleByStatus3 = (val1, val2, status) => {
+        if (isValidStatus(status)) {
+          return `${getStr(minus, val1)}\n ${getStr(plus, val2)}`;
+        }
+        return [];
+      };
+      const processedCells = [];
+      processedCells.push(handleByStatus1(children, 'deleted nested', minus, 'del'));
+      processedCells.push(handleByStatus1(children, 'added nested', plus, 'add'));
+      processedCells.push(handleByStatus1(value1, 'del', minus, 'del'));
+      processedCells.push(handleByStatus1(value2, 'add', plus, 'add'));
+      processedCells.push(handleByStatus2(children, 'nested'));
+      processedCells.push(handleByStatus3(children, value2, 'nested changed to value'));
+      processedCells.push(handleByStatus3(value1, value2, 'changed'));
+      processedCells.push(handleByStatus2(value1, 'unchanged'));
 
-      if (getValue(elem, 'status') === 'nested changed to value') {
-        return `${getStr(minus, children)}\n ${getStr(plus, value2)}`;
-      }
-
-      if (getValue(elem, 'status') === 'added nested') {
-        const tab = (getValue(elem, 'substatus') === 'add') ? space : plus;
-        return getStr(tab, children);
-      }
-
-      if (getValue(elem, 'status') === 'del') {
-        const tab = (getValue(elem, 'substatus') === 'del') ? space : minus;
-        return getStr(tab, value1);
-      }
-
-      if (getValue(elem, 'status') === 'add') {
-        const tab = (getValue(elem, 'substatus') === 'add') ? space : plus;
-        return getStr(tab, value2);
-      }
-
-      if (getValue(elem, 'status') === 'changed') {
-        return `${getStr(minus, value1)}\n ${getStr(plus, value2)}`;
-      }
-
-      return getStr(space, value1);
+      const cell = processedCells.filter((element) => !Array.isArray(element));
+      return cell;
     });
     return `\n ${result.join('\n ')}`;
   };
-
   return `{${formater(astDiff)}\n}`;
 };
-
 export default stylish;
