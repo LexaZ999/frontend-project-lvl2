@@ -1,4 +1,4 @@
-import getValue from './getValue.js';
+import getValue from '../getValue.js';
 
 const space = ' ';
 const minus = '-';
