@@ -12,7 +12,6 @@ const cli = () => {
     .action((filepath1, filepath2) => {
       const format = `${program.opts().format}`;
       console.log(gendiff(filepath1, filepath2, format));
-      console.log(format);
     })
     .parse(process.argv);
 };
