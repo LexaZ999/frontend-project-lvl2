@@ -1,8 +1,10 @@
 import stylish from './stylish.js';
 import plain from './plain.js';
+import jsonFormatter from './jsonFormatter.js';
 
 const selectsFormatter = (formatName, ast) => {
-  const result = (formatName === 'plain') ? plain(ast) : stylish(ast);
-  return result;
+  if (formatName === 'plain') return plain(ast);
+  if ((formatName === 'json')) return jsonFormatter(ast);
+  return stylish(ast);
 };
 export default selectsFormatter;
