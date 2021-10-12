@@ -1,0 +1,88 @@
+[
+  {
+    "path": "common.follow",
+    "action": "added",
+    "newValue": false
+  },
+  {
+    "path": "common.setting1",
+    "action": "unchanged",
+    "oldValue": "Value 1",
+    "newValue": "Value 1"
+  },
+  {
+    "path": "common.setting2",
+    "action": "removed",
+    "oldValue": 200
+  },
+  {
+    "path": "common.setting3",
+    "action": "updated",
+    "oldValue": true,
+    "newValue": null
+  },
+  {
+    "path": "common.setting4",
+    "action": "added",
+    "newValue": "blah blah"
+  },
+  {
+    "path": "common.setting5.key5",
+    "action": "added",
+    "newValue": "value5"
+  },
+  {
+    "path": "common.setting6.doge.wow",
+    "action": "updated",
+    "oldValue": "",
+    "newValue": "so much"
+  },
+  {
+    "path": "common.setting6.key",
+    "action": "unchanged",
+    "oldValue": "value",
+    "newValue": "value"
+  },
+  {
+    "path": "common.setting6.ops",
+    "action": "added",
+    "newValue": "vops"
+  },
+  {
+    "path": "group1.baz",
+    "action": "updated",
+    "oldValue": "bas",
+    "newValue": "bars"
+  },
+  {
+    "path": "group1.foo",
+    "action": "unchanged",
+    "oldValue": "bar",
+    "newValue": "bar"
+  },
+  {
+    "path": "group1.nest.key",
+    "action": "removed",
+    "oldValue": "value"
+  },
+  {
+    "path": "group2.abc",
+    "action": "removed",
+    "oldValue": 12345
+  },
+  {
+    "path": "group2.deep.id",
+    "action": "removed",
+    "oldValue": 45
+  },
+  {
+    "path": "group3.deep.id.number",
+    "action": "added",
+    "newValue": 45
+  },
+  {
+    "path": "group3.fee",
+    "action": "added",
+    "newValue": 100500
+  }
+]
