@@ -10,11 +10,10 @@ const getAstDiff = (obj1, obj2, path = '', depth = 0, substatus) => {
     const val1 = getValue(obj1, key);
     const val2 = getValue(obj2, key);
     const point = '.';
-    let status;
 
-    const createDiffCell = (value1, value2, children) => {
+    const createDiffCell = (value1, value2, leafPath, status, children) => {
       const diffCell = {
-        key, value1, value2, path, depth, status, substatus, children,
+        key, value1, value2, leafPath, depth, status, substatus, children,
       };
       return diffCell;
     };
@@ -22,23 +21,21 @@ const getAstDiff = (obj1, obj2, path = '', depth = 0, substatus) => {
     const pathAndSeparator = (path === '') ? path : (path + point);
 
     if (typeof val1 === 'object' && typeof val2 === 'object') {
-      status = 'nested';
-      return createDiffCell('nested', 'nested', getAstDiff(val1, val2, pathAndSeparator + key, depth + 1));
+      return createDiffCell('nested', 'nested', pathAndSeparator + key, 'nested', getAstDiff(val1, val2, pathAndSeparator + key, depth + 1));
     }
     if (typeof val1 === 'object' && typeof val2 !== 'object') {
-      status = val2 ? 'nested changed to value' : 'deleted nested';
-      return createDiffCell('nested', val2, getAstDiff(val1, {}, pathAndSeparator + key, depth + 1, 'del'));
+      const currentStatusNested = val2 ? 'nested changed to value' : 'deleted nested';
+      return createDiffCell('nested', val2, pathAndSeparator + key, currentStatusNested, getAstDiff(val1, {}, pathAndSeparator + key, depth + 1, 'del'));
     }
     if (!_.has(obj1, key) && _.has(obj2, key) && typeof val2 === 'object') {
-      status = 'added nested';
-      return createDiffCell(val1, 'nested', getAstDiff({}, val2, pathAndSeparator + key, depth + 1, 'add'));
+      return createDiffCell(val1, 'nested', pathAndSeparator + key, 'added nested', getAstDiff({}, val2, pathAndSeparator + key, depth + 1, 'add'));
     }
     if ((val1 === undefined) || (val2 === undefined)) {
-      status = (val1 === undefined) ? 'add' : 'del';
-      return createDiffCell(val1, val2);
+      const statusAddOrDel = (val1 === undefined) ? 'add' : 'del';
+      return createDiffCell(val1, val2, pathAndSeparator + key, statusAddOrDel);
     }
-    status = (val1 === val2) ? 'unchanged' : 'changed';
-    return createDiffCell(val1, val2);
+    const statusUnchangedOrChanged = (val1 === val2) ? 'unchanged' : 'changed';
+    return createDiffCell(val1, val2, pathAndSeparator + key, statusUnchangedOrChanged);
   });
   return result.flat();
 };

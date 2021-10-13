@@ -6,13 +6,11 @@ const parsers = (filepath) => {
   const data = readFile(filepath);
   const format = path.extname(filepath);
 
-  let parse;
+  if (format === '.json') return JSON.parse(data);
+  if (format === '.yaml') return yaml.load(data);
+  if (format === '.yml') return yaml.load(data);
 
-  if (format === '.json') parse = JSON.parse;
-  if (format === '.yaml') parse = yaml.load;
-  if (format === '.yml') parse = yaml.load;
-
-  return parse(data);
+  throw new Error(`unknown file type: '${format}'!`);
 };
 
 export default parsers;

@@ -1,60 +1,50 @@
-import getValue from '../getValue.js';
-
 const jsonFormatter = (astDiff) => {
   const formater = (data) => {
     const result = data.flatMap((elem) => {
-      const oldValue = getValue(elem, 'value1');
-      const newValue = getValue(elem, 'value2');
-      const name = getValue(elem, 'key');
-      const path = `${getValue(elem, 'path')}.${name}`;
-      const isValidStatus = (status) => getValue(elem, 'status') === status;
+      const {
+        value1, value2, children, leafPath, status,
+      } = elem;
       const getObjData = (action) => {
-        let output;
-        if (oldValue === undefined) {
-          output = {
-            path,
+        if (value1 === undefined) {
+          return {
+            leafPath,
             action,
-            newValue,
+            newValue: value2,
           };
         }
-        if (newValue === undefined) {
-          output = {
-            path,
+        if (value2 === undefined) {
+          return {
+            leafPath,
             action,
-            oldValue,
+            oldValue: value1,
           };
         }
-        output = {
-          path,
+        return {
+          leafPath,
           action,
-          oldValue,
-          newValue,
+          oldValue: value1,
+          newValue: value2,
         };
-        return output;
       };
-      const getStrPlain = () => {
-        let outputObj;
-        if (isValidStatus('nested')
-          || isValidStatus('added nested')
-          || isValidStatus('nested changed to value')
-          || isValidStatus('deleted nested')) {
-          outputObj = formater(getValue(elem, 'children'));
-        }
-        if (isValidStatus('add')) {
-          outputObj = getObjData('added');
-        }
-        if (isValidStatus('del')) {
-          outputObj = getObjData('removed');
-        }
-        if (isValidStatus('changed')) {
-          outputObj = getObjData('updated');
-        }
-        if (isValidStatus('unchanged')) {
-          outputObj = getObjData('unchanged');
-        }
-        return outputObj;
-      };
-      return getStrPlain();
+      if (status === 'nested'
+      || status === 'added nested'
+      || status === 'nested changed to value'
+      || status === 'deleted nested') {
+        return formater(children);
+      }
+      if (status === 'add') {
+        return getObjData('added');
+      }
+      if (status === 'del') {
+        return getObjData('removed');
+      }
+      if (status === 'changed') {
+        return getObjData('updated');
+      }
+      if (status === 'unchanged') {
+        return getObjData('unchanged');
+      }
+      throw new Error(`unknown file type: '${status}'!`);
     });
     return result;
   };
