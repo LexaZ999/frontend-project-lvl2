@@ -6,7 +6,7 @@ test('parsers', () => {
   const fileYaml = { parser: 'yaml' };
   const fileYml = { parser: 'yml' };
 
-  expect(parsers('__fixtures__/parsers/json.json')).toEqual(fileJson);
-  expect(parsers('__fixtures__/parsers/yaml.yaml')).toEqual(fileYaml);
-  expect(parsers('__fixtures__/parsers/yml.yml')).toEqual(fileYml);
+  expect(parsers('parsers/json.json')).toEqual(fileJson);
+  expect(parsers('parsers/yaml.yaml')).toEqual(fileYaml);
+  expect(parsers('parsers/yml.yml')).toEqual(fileYml);
 });
