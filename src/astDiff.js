@@ -30,6 +30,11 @@ const getAstDiff = (obj1, obj2, path = '', depth = 0, substatus) => {
     if (!_.has(obj1, key) && _.has(obj2, key) && typeof val2 === 'object' && val2 !== null) {
       return createDiffCell(val1, 'nested', pathAndSeparator + key, 'added nested', getAstDiff({}, val2, pathAndSeparator + key, depth + 1, 'add'));
     }
+
+    if (_.has(obj1, key) && _.has(obj2, key) && typeof val2 === 'object' && val2 !== null) {
+      return createDiffCell(val1, 'nested', pathAndSeparator + key, 'value changed to nested', getAstDiff({}, val2, pathAndSeparator + key, depth + 1, 'add'));
+    }
+
     if ((val1 === undefined) || (val2 === undefined)) {
       const statusAddOrDel = (val1 === undefined) ? 'add' : 'del';
       return createDiffCell(val1, val2, pathAndSeparator + key, statusAddOrDel);

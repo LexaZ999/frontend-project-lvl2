@@ -29,7 +29,8 @@ const jsonFormatter = (astDiff) => {
       if (status === 'nested'
       || status === 'added nested'
       || status === 'nested changed to value'
-      || status === 'deleted nested') {
+      || status === 'deleted nested'
+      || status === 'value changed to nested') {
         return formater(children);
       }
       if (status === 'add') {

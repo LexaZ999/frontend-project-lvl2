@@ -44,6 +44,7 @@ const stylish = (astDiff) => {
       processedCells.push(handleByStatus1(value2, 'add', plus, 'add'));
       processedCells.push(handleByStatus2('children', 'nested'));
       processedCells.push(handleByStatus3('children', value2, 'nested changed to value'));
+      processedCells.push(handleByStatus3(value1, 'children', 'value changed to nested'));
       processedCells.push(handleByStatus3(value1, value2, 'changed'));
       processedCells.push(handleByStatus2(value1, 'unchanged'));
 

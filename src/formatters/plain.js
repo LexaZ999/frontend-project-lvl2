@@ -25,6 +25,9 @@ const plain = (astDiff) => {
       if (status === 'nested changed to value') {
         return `Property '${leafPath}' was updated. From [complex value] to ${newValue}`;
       }
+      if (status === 'value changed to nested') {
+        return `Property '${leafPath}' was updated. From ${oldValue} to [complex value] `;
+      }
       if (status === 'deleted nested') {
         return `Property '${leafPath}' was removed`;
       }
